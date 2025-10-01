@@ -1,6 +1,7 @@
 #!{{ lookPath "sh" }}
 
 # .bootstrap/setup.yml hash: {{ include "dot_bootstrap/setup.yaml" | sha256sum }}
+alias ansible-paybook=/home/linuxbrew/.linuxbrew/bin/ansible-playbook
 
 if command -v ansible-playbook &> /dev/null; then
     ansible-playbook {{ joinPath .chezmoi.sourceDir "dot_bootstrap/setup.yaml" | quote }} --ask-become-pass
