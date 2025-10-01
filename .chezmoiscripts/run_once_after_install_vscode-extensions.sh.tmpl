@@ -1,0 +1,12 @@
+#!{{ lookPath "sh" }}
+
+set -euo pipefail
+
+# Проверяем, установлен ли VSCode
+if command -v code >/dev/null 2>&1; then
+  while read -r ext; do
+    if ! code --list-extensions | grep -qx "$ext"; then
+      code --install-extension "$ext"
+    fi
+  done < {{ .chezmoi.sourceDir }}/vscode-extensions.txt
+fi

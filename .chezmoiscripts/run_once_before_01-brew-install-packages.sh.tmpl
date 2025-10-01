@@ -1,0 +1,17 @@
+#!{{ lookPath "sh" }}
+
+{{ if eq .chezmoi.os "linux" -}}
+export HOMEBREW_INSTALL_FROM_API=1
+alias brew=/home/linuxbrew/.linuxbrew/bin/brew
+
+set -euo pipefail
+
+# Homebrew/Linuxbrew
+if command -v brew >/dev/null 2>&1 && [ {{ len .packages.linux.brew }} -gt 0 ]; then
+  brew bundle --file=/dev/stdin <<EOF
+{{- range .packages.linux.brew }}
+brew {{ . | quote }}
+{{- end }}
+EOF
+fi
+{{ end -}}

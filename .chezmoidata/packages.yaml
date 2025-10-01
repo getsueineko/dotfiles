@@ -1,0 +1,43 @@
+packages:
+  linux:
+    apt:
+      - curl
+      - wget
+    brew:
+      - ansible
+      - argocd
+      - bat
+      - croc
+      - doctl
+      - dua-cli
+      - eza
+      - fastfetch
+      - fd
+      - flux
+      - fzf
+      - govc
+      - helix
+      - jq
+      - k9s
+      - krew
+      - kubecolor
+      - kubernetes-cli
+      - kustomize
+      - lazydocker
+      - lazygit
+      - lazyjournal
+      - lazysql
+      - lazyssh
+      - neovim
+      - nova-fairwinds
+      - posting
+      - rainfrog
+      - resvg
+      - ripgrep
+      - ruff
+      - uv
+      - xh
+      - yazi
+      - yq
+      - zellij
+      - zoxide

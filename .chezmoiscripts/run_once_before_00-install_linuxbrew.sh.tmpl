@@ -1,0 +1,18 @@
+#!{{ lookPath "sh" }}
+
+set -euo pipefail
+
+# Check if brew is already installed
+if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew (Linuxbrew)..."
+
+    # Install Homebrew using the official Linux install script
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add brew to PATH for current session
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.profile"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+else
+    echo "Homebrew is already installed — skipping"
+fi

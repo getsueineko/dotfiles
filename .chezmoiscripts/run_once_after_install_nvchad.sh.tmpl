@@ -1,0 +1,20 @@
+#!{{ lookPath "sh" }}
+
+set -euo pipefail
+
+# Check if Neovim is installed
+if ! command -v nvim >/dev/null 2>&1; then
+  echo "Neovim is not installed. Please install it first."
+  exit 1
+fi
+
+# Target directory for NvChad
+NVIM_CONFIG_DIR="${HOME}/.config/nvim"
+
+# If NvChad is not already installed, clone it
+if [ ! -d "$NVIM_CONFIG_DIR" ]; then
+  echo "Installing NvChad..."
+  git clone --depth 1 https://github.com/NvChad/NvChad.git "$NVIM_CONFIG_DIR"
+else
+  echo "NvChad is already installed in $NVIM_CONFIG_DIR"
+fi

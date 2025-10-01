@@ -1,0 +1,87 @@
+# ===== History Settings =====
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+
+# Options for better history management
+setopt append_history share_history      # share history across sessions
+setopt hist_ignore_space hist_ignore_all_dups hist_save_no_dups
+setopt hist_ignore_dups hist_find_no_dups
+setopt inc_append_history_time          # save history immediately with timestamp
+
+# ===== Some improvements =====
+setopt correct         
+setopt auto_cd
+
+# ===== Starship Prompt =====
+eval "$(starship init zsh)"
+
+# ===== Zinit  =====
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+
+# ===== Plugins  =====         
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions          
+zinit light none9632/zsh-sudo
+zinit light Aloxaf/fzf-tab
+zinit light zdharma/fast-syntax-highlighting 
+
+# ===== PATH =====
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+# ===== Homebrew Environment =====
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+# ===== Completion System =====
+autoload -Uz compinit && compinit
+
+# Enable history completion in fzf-tab
+# Combines current session history and file-based history
+zstyle ':fzf-tab:complete:history:*' fzf-preview 'fc -l 1 | tac; tail -n 5000 ~/.zsh_history | tac'
+zstyle ':fzf-tab:complete:history:*' fzf-switch '1'
+
+# Enable interactive previews for cd and zoxide completions
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
+# General completion settings
+eval "$(dircolors -b)"  # ensure LS_COLORS is defined
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+
+# ===== Aliases =====
+alias wttr='wget -O - wttr.in/Moscow -q'
+
+# ===== Tools =====
+eval "$(zoxide init zsh)"           # zoxide integration for smart cd
+
+# ===== fzf Key Bindings =====
+# Load fzf Zsh key bindings to enable Ctrl+R, etc.
+[ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] && source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
+
+# Bind Ctrl+R to interactive history search
+bindkey '^R' fzf-history-widget

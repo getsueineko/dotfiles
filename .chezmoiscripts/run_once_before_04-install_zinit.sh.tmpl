@@ -1,0 +1,18 @@
+#!{{ lookPath "sh" }}
+
+set -euo pipefail
+
+# Check if zsh is installed
+if ! command -v zsh >/dev/null 2>&1; then
+    echo "Zsh is not installed. Please install zsh and try again."
+    exit 1
+fi
+
+# Check if zinit is already installed
+if [ ! -d "${HOME}/.zinit/bin" ]; then
+    echo "Installing zinit..."
+    # Run the official zinit install script
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/main/scripts/install.sh)"
+else
+    echo "zinit is already installed — skipping"
+fi
