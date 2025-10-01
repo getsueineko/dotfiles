@@ -4,7 +4,7 @@
 export HOMEBREW_INSTALL_FROM_API=1
 alias brew=/home/linuxbrew/.linuxbrew/bin/brew
 
-set -euo pipefail
+# set -euo pipefail
 
 # Homebrew/Linuxbrew
 if command -v brew >/dev/null 2>&1 && [ {{ len .packages.linux.brew }} -gt 0 ]; then

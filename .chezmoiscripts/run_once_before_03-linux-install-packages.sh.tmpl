@@ -1,7 +1,7 @@
 #!{{ lookPath "sh" }}
 
 {{ if eq .chezmoi.os "linux" -}}
-set -euo pipefail
+# set -euo pipefail
 
 # APT (если что-то указано)
 if command -v apt-get >/dev/null 2>&1 && [ {{ len .packages.linux.apt }} -gt 0 ]; then
