@@ -35,10 +35,9 @@
           - flatpak
           - qt5ct
           - qt5-style-plugins
-          - qt6ct
-          - qt6-qmltooling-plugins
           - qt5-style-kvantum
-          - kvantum
+          - qt6ct 
+          - qt6-style-kvantum
         state: present
 
     - name: Change shell to zsh
