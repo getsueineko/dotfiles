@@ -42,36 +42,36 @@
         name: "{{ remote_regular_user }}"
         shell: /usr/bin/zsh
 
-    # ---- VS Code ----
-    - name: Download Microsoft GPG key and dearmor
-      ansible.builtin.shell: |
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-        install -D -o root -g root -m 644 /tmp/microsoft.gpg /usr/share/keyrings/microsoft.gpg
-        rm -f /tmp/microsoft.gpg
-      args:
-        creates: /usr/share/keyrings/microsoft.gpg
-      become: true
+    # # ---- VS Code ----
+    # - name: Download Microsoft GPG key and dearmor
+    #   ansible.builtin.shell: |
+    #     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+    #     install -D -o root -g root -m 644 /tmp/microsoft.gpg /usr/share/keyrings/microsoft.gpg
+    #     rm -f /tmp/microsoft.gpg
+    #   args:
+    #     creates: /usr/share/keyrings/microsoft.gpg
+    #   become: true
     
-    - name: Add Visual Studio Code sources file
-      ansible.builtin.copy:
-        dest: /etc/apt/sources.list.d/vscode.sources
-        content: |
-          Types: deb
-          URIs: https://packages.microsoft.com/repos/code
-          Suites: stable
-          Components: main
-          Architectures: amd64,arm64,armhf
-          Signed-By: /usr/share/keyrings/microsoft.gpg
-        owner: root
-        group: root
-        mode: '0644'
-      become: true
+    # - name: Add Visual Studio Code sources file
+    #   ansible.builtin.copy:
+    #     dest: /etc/apt/sources.list.d/vscode.sources
+    #     content: |
+    #       Types: deb
+    #       URIs: https://packages.microsoft.com/repos/code
+    #       Suites: stable
+    #       Components: main
+    #       Architectures: amd64,arm64,armhf
+    #       Signed-By: /usr/share/keyrings/microsoft.gpg
+    #     owner: root
+    #     group: root
+    #     mode: '0644'
+    #   become: true
 
-    - name: Install VS Code
-      ansible.builtin.apt:
-        name: code
-        state: present
-        update_cache: true
+    # - name: Install VS Code
+    #   ansible.builtin.apt:
+    #     name: code
+    #     state: present
+    #     update_cache: true
 
     # ---- Docker ----
     - name: Add Docker GPG key
