@@ -34,10 +34,7 @@
           - lsb-release
           - flatpak
           - qt5ct
-          - qt5-style-plugins
-          - qt5-style-kvantum
           - qt6ct 
-          - qt6-style-kvantum
         state: present
 
     - name: Change shell to zsh
