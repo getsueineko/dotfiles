@@ -43,18 +43,28 @@
         shell: /usr/bin/zsh
 
     # ---- VS Code ----
-    - name: Import Microsoft GPG key
-      ansible.builtin.get_url:
-        url: https://packages.microsoft.com/keys/microsoft.asc
-        dest: /usr/share/keyrings/microsoft.gpg
-        mode: '0644'
+    - name: Download Microsoft GPG key and dearmor
+      ansible.builtin.shell: |
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+        install -D -o root -g root -m 644 /tmp/microsoft.gpg /usr/share/keyrings/microsoft.gpg
+        rm -f /tmp/microsoft.gpg
+      args:
+        creates: /usr/share/keyrings/microsoft.gpg
       become: true
     
-    - name: Add Visual Studio Code repository
-      ansible.builtin.apt_repository:
-        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
-        state: present
-        filename: vscode
+    - name: Add Visual Studio Code sources file
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/vscode.sources
+        content: |
+          Types: deb
+          URIs: https://packages.microsoft.com/repos/code
+          Suites: stable
+          Components: main
+          Architectures: amd64,arm64,armhf
+          Signed-By: /usr/share/keyrings/microsoft.gpg
+        owner: root
+        group: root
+        mode: '0644'
       become: true
 
     - name: Install VS Code
