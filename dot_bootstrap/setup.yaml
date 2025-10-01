@@ -113,8 +113,8 @@
       community.general.flatpak_remote:
         name: flathub
         state: present
-        flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
-        system: true
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
 
     - name: Install Flatpak packages (system-wide)
       community.general.flatpak:
