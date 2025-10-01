@@ -7,7 +7,7 @@ if ! command -v starship >/dev/null 2>&1; then
     echo "Installing starship..."
 
     # Install starship using the official install script (Linux/macOS)
-    curl -fsSL https://starship.rs/install.sh | bash -s -- -y
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
 
     # Optionally add starship to PATH for current session
     export PATH="$HOME/.cargo/bin:$PATH"
