@@ -16,7 +16,7 @@ NVIM_CONFIG_DIR="${HOME}/.config/nvim"
 # If NvChad is not already installed, clone it
 if [ ! -d "$NVIM_CONFIG_DIR" ]; then
   echo "Installing NvChad..."
-  git clone --depth 1 https://github.com/NvChad/NvChad.git "$NVIM_CONFIG_DIR"
+  git clone https://github.com/NvChad/starter $NVIM_CONFIG_DIR"
 else
   echo "NvChad is already installed in $NVIM_CONFIG_DIR"
 fi
