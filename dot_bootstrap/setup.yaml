@@ -49,33 +49,14 @@
         shell: /usr/bin/zsh
 
     # ---- VS Code ----
-    - name: Preseed Microsoft repo for VS Code
-      ansible.builtin.debconf:
-        name: "code"
-        question: "code/add-microsoft-repo"
-        value: "true"
-        vtype: "boolean"
-      become: true
-
-    - name: Update apt cache after adding Microsoft repo
+    - name: Download and install VS Code
       ansible.builtin.apt:
-        update_cache: true
-      become: true
-
-    - name: Install VS Code
-      ansible.builtin.apt:
-        name: code
+        deb: "https://go.microsoft.com/fwlink/?LinkID=760868"
         state: present
-        update_cache: true
-
-    # # ---- Docker ----
-    - name: Create /etc/apt/keyrings directory
-      ansible.builtin.file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: '0755'
       become: true
 
+
+    # ---- Docker ----
     - name: Add Docker's official GPG key
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/ubuntu/gpg
