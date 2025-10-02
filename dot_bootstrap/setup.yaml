@@ -4,9 +4,8 @@
   become: true
   connection: local
   gather_facts: true
-  # vars:
-  #   flyctl_version: "0.1.130"
-  #   pulumi_version: "v3.94.2"
+  vars:
+    meslo_version: "v3.4.0"
 
   tasks:
     - name: Get my user
@@ -22,6 +21,7 @@
       ansible.builtin.apt:
         name:
           - zsh
+          - aria2
           - apt-transport-https
           - ca-certificates
           - build-essential
@@ -92,6 +92,36 @@
         groups: docker
         append: true
 
+    # ---- Fonts ----
+    - name: Ensure fonts directory exists
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.fonts"
+        state: directory
+        mode: "0755"
+
+    - name: Check if Meslo font already exists
+      ansible.builtin.stat:
+        path: "{{ lookup('env', 'HOME') }}/.fonts/*Meslo*.ttf"
+      register: meslo_exists
+
+    - name: Download Meslo Nerd Font
+      ansible.builtin.get_url:
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ meslo_version }}/Meslo.tar.xz"
+        dest: "/tmp/Meslo.tar.xz"
+        mode: "0644"
+      when: not meslo_exists.stat.exists
+
+    - name: Extract Meslo Nerd Font
+      ansible.builtin.unarchive:
+        src: "/tmp/Meslo.tar.xz"
+        dest: "{{ lookup('env', 'HOME') }}/.fonts/"
+        remote_src: yes
+      when: not meslo_exists.stat.exists
+
+    - name: Refresh font cache
+      ansible.builtin.command: fc-cache -f
+      changed_when: false
+
     # ---- Flatpak ----
     - name: Add Flathub remote (system-wide)
       community.general.flatpak_remote:
@@ -125,10 +155,5 @@
         state: present
         method: system
 
-    # ---- Fonts ----
-    - name: Ensure fonts directory
-      ansible.builtin.file:
-        path: "/home/{{ remote_regular_user }}/.fonts"
-        state: directory
-        mode: "0755"
-        owner: "{{ remote_regular_user }}"
+    - name: Update desktop database
+      ansible.builtin.command: update-desktop-database        
