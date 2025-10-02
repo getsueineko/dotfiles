@@ -28,7 +28,7 @@
           - zsh
           - apt-transport-https
           - ca-certificates
-          - curl
+          - build-essential
           - software-properties-common
           - gnupg
           - lsb-release
