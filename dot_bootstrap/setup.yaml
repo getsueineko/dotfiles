@@ -37,76 +37,85 @@
           - qt6ct 
         state: present
 
+    - name: Download and install Warp terminal
+      ansible.builtin.apt:
+        deb: "https://app.warp.dev/download?package=deb"
+        state: present
+      become: true
+
     - name: Change shell to zsh
       ansible.builtin.user:
         name: "{{ remote_regular_user }}"
         shell: /usr/bin/zsh
 
-    # # ---- VS Code ----
-    # - name: Download Microsoft GPG key and dearmor
-    #   ansible.builtin.shell: |
-    #     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-    #     install -D -o root -g root -m 644 /tmp/microsoft.gpg /usr/share/keyrings/microsoft.gpg
-    #     rm -f /tmp/microsoft.gpg
-    #   args:
-    #     creates: /usr/share/keyrings/microsoft.gpg
-    #   become: true
-    
-    # - name: Add Visual Studio Code sources file
-    #   ansible.builtin.copy:
-    #     dest: /etc/apt/sources.list.d/vscode.sources
-    #     content: |
-    #       Types: deb
-    #       URIs: https://packages.microsoft.com/repos/code
-    #       Suites: stable
-    #       Components: main
-    #       Architectures: amd64,arm64,armhf
-    #       Signed-By: /usr/share/keyrings/microsoft.gpg
-    #     owner: root
-    #     group: root
-    #     mode: '0644'
-    #   become: true
+    # ---- VS Code ----
+    - name: Preseed Microsoft repo for VS Code
+      ansible.builtin.debconf:
+        name: "code"
+        question: "code/add-microsoft-repo"
+        value: "true"
+        vtype: "boolean"
+      become: true
 
-    # - name: Install VS Code
-    #   ansible.builtin.apt:
-    #     name: code
-    #     state: present
-    #     update_cache: true
+    - name: Update apt cache after adding Microsoft repo
+      ansible.builtin.apt:
+        update_cache: true
+      become: true
+
+    - name: Install VS Code
+      ansible.builtin.apt:
+        name: code
+        state: present
+        update_cache: true
 
     # # ---- Docker ----
-    # - name: Add Docker GPG key
-    #   ansible.builtin.get_url:
-    #     url: https://download.docker.com/linux/ubuntu/gpg
-    #     dest: /usr/share/keyrings/docker-archive-keyring.gpg
-    #     mode: "0644"
+    - name: Create /etc/apt/keyrings directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+      become: true
 
-    # - name: Add Docker repository
-    #   ansible.builtin.apt_repository:
-    #     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-    #     state: present
-    #     filename: docker
+    - name: Add Docker's official GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+      become: true
 
-    # - name: Install Docker packages
-    #   ansible.builtin.apt:
-    #     name:
-    #       - docker-ce
-    #       - docker-ce-cli
-    #       - containerd.io
-    #       - docker-buildx-plugin
-    #       - docker-compose-plugin
-    #     state: present
-    #     update_cache: true
+    - name: Add Docker apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture | replace('x86_64','amd64') }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename | default(ansible_distribution_release) }} stable"
+        state: present
+        filename: docker
+      become: true
 
-    # - name: Add Docker group
-    #   ansible.builtin.group:
-    #     name: docker
-    #     state: present
+    - name: Update apt cache after adding Docker repo
+      ansible.builtin.apt:
+        update_cache: true
+      become: true
 
-    # - name: Add user to docker group
-    #   ansible.builtin.user:
-    #     name: "{{ remote_regular_user }}"
-    #     groups: docker
-    #     append: true
+    - name: Install Docker packages
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+    - name: Add Docker group
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        groups: docker
+        append: true
 
     # ---- Flatpak ----
     - name: Add Flathub remote (system-wide)
@@ -119,15 +128,17 @@
     - name: Install Flatpak packages (system-wide)
       community.general.flatpak:
         name:
-          - com.obsproject.Studio
-          - org.videolan.VLC
-          - org.tenacityaudio.Tenacity
-          - md.obsidian.Obsidian
-          - org.gimp.GIMP
           - rest.insomnia.Insomnia
           - com.github.johnfactotum.Foliate
-          - org.gnome.meld
-          - org.sqlitebrowser.sqlitebrowser
+          - app.zen_browser.zen
+          - com.spotify.Client
+          - com.termius.Termius
+          - io.github.celluloid_player.Celluloid
+          - org.gnome.World.Secrets
+          - org.localsend.localsend_app
+          - org.telegram.desktop 
+          - re.sonny.Junction
+          - md.obsidian.Obsidian 
         state: present
         method: system
 
