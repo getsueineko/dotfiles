@@ -21,10 +21,6 @@
     - name: Install base packages
       ansible.builtin.apt:
         name:
-          - htop
-          - atop
-          - iftop
-          - vim-tiny
           - zsh
           - apt-transport-https
           - ca-certificates
@@ -32,9 +28,7 @@
           - software-properties-common
           - gnupg
           - lsb-release
-          - flatpak
-          - qt5ct
-          - qt6ct 
+          - flatpak          
         state: present
 
     - name: Download and install Warp terminal
