@@ -10,5 +10,5 @@ alias ansible-playbook=/home/linuxbrew/.linuxbrew/bin/ansible-playbook
 
 if command -v ansible-playbook &> /dev/null; then
     echo "\n${GREEN}Starting basic setup...${NC}\n"      
-    ansible-playbook {{ joinPath .chezmoi.sourceDir "dot_bootstrap/setup.yaml" | quote }} --ask-become-pass -v
+    ansible-playbook {{ joinPath .chezmoi.sourceDir "dot_bootstrap/setup.yaml" | quote }} --ask-become-pass
 fi
