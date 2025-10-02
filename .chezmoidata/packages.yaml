@@ -1,8 +1,13 @@
 packages:
   linux:
     apt:
-      - curl
       - wget
+      - htop
+      - atop
+      - iftop
+      - vim-tiny      
+      - qt5ct
+      - qt6ct 
     brew:
       - ansible
       - argocd
