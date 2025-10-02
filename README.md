@@ -3,6 +3,8 @@
 Personal dotfiles managed with [chezmoi](https://chezmoi.io/).  
 Keeps shell configs, app settings, and scripts consistent across machines.
 
+![Demo](assets/demo.gif)
+
 ---
 
 ## Features & Overview
