@@ -109,7 +109,6 @@
     - name: Install Flatpak packages (system-wide)
       community.general.flatpak:
         name:
-          - rest.insomnia.Insomnia
           - com.github.johnfactotum.Foliate
           - app.zen_browser.zen
           - com.spotify.Client
@@ -119,7 +118,16 @@
           - org.localsend.localsend_app
           - org.telegram.desktop 
           - re.sonny.Junction
-          - md.obsidian.Obsidian 
+          - md.obsidian.Obsidian
+          - be.alexandervanhee.gradia
+          - com.odnoyko.valot
+          - org.gnome.Fractal
+          - io.github.realmazharhussain.GdmSettings
+          - io.github.flattool.Warehouse
+          - com.github.tchx84.Flatseal
+          - io.missioncenter.MissionCenter
+          - com.reqable.Reqable
+          - com.mattjakeman.ExtensionManager
         state: present
         method: system
 
