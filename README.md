@@ -1,4 +1,4 @@
-# For those too lazy to mess with NixOS packages 😅
+# For those too lazy to mess with Nix Package Manager 😅
 
 Personal dotfiles managed with [chezmoi](https://chezmoi.io/).  
 Keeps shell configs, app settings, and scripts consistent across machines.
@@ -68,3 +68,4 @@ chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git
 ## TODO
 
 - Add Nerd Font (**MesloLGS**) to ensure proper icons in terminal
+
