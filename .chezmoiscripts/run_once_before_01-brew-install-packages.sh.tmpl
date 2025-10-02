@@ -2,6 +2,7 @@
 
 {{ if eq .chezmoi.os "linux" -}}
 export HOMEBREW_INSTALL_FROM_API=1
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
 alias brew=/home/linuxbrew/.linuxbrew/bin/brew
 
 # set -euo pipefail
