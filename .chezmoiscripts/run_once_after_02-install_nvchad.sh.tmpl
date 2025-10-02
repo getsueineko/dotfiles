@@ -4,9 +4,14 @@
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # Check if Neovim is installed
 if ! command -v nvim >/dev/null 2>&1; then
-  echo "Neovim is not installed. Please install it first."
+  echo "\n${RED}Neovim is not installed. Please install it first.${NC}\n"
   exit 1
 fi
 
@@ -15,8 +20,8 @@ NVIM_CONFIG_DIR="${HOME}/.config/nvim"
 
 # If NvChad is not already installed, clone it
 if [ ! -d "$NVIM_CONFIG_DIR" ]; then
-  echo "Installing NvChad..."
+  echo "\n${GREEN}Installing NvChad...${NC}\n"
   git clone https://github.com/NvChad/starter "$NVIM_CONFIG_DIR"
 else
-  echo "NvChad is already installed in $NVIM_CONFIG_DIR"
+  echo "\n${GREEN}NvChad is already installed in $NVIM_CONFIG_DIR${NC}\n"
 fi

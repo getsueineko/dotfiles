@@ -2,17 +2,22 @@
 
 # set -euo pipefail
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # Check if zsh is installed
 if ! command -v zsh >/dev/null 2>&1; then
-    echo "Zsh is not installed. Please install zsh and try again."
+    echo "\n${RED}Zsh is not installed. Please install zsh and try again.${NC}\n"
     exit 1
 fi
 
 # Check if zinit is already installed
 if [ ! -d "${HOME}/.zinit/bin" ]; then
-    echo "Installing zinit..."
+    echo "\n${GREEN}Installing zinit...${NC}\n"
     # Run the official zinit install script
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/main/scripts/install.sh)"
 else
-    echo "zinit is already installed — skipping"
+    echo "\n${GREEN}zinit is already installed — skipping${NC}\n"
 fi

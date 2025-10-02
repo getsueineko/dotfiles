@@ -2,9 +2,14 @@
 
 # set -euo pipefail
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # Check if starship is installed
 if ! command -v starship >/dev/null 2>&1; then
-    echo "Installing starship..."
+    echo "\n${GREEN}Installing starship...${NC}\n"
 
     # Install starship using the official install script (Linux/macOS)
     curl -sS https://starship.rs/install.sh | sh -s -- -y
@@ -12,5 +17,5 @@ if ! command -v starship >/dev/null 2>&1; then
     # Optionally add starship to PATH for current session
     export PATH="$HOME/.cargo/bin:$PATH"
 else
-    echo "Starship is already installed — skipping"
+    echo "\n${GREEN}Starship is already installed — skipping${NC}\n"
 fi

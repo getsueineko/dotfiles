@@ -1,8 +1,14 @@
 #!{{ lookPath "sh" }}
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # .bootstrap/setup.yml hash: {{ include "dot_bootstrap/setup.yaml" | sha256sum }}
 alias ansible-playbook=/home/linuxbrew/.linuxbrew/bin/ansible-playbook
 
 if command -v ansible-playbook &> /dev/null; then
+    echo "\n${GREEN}Starting basic setup...${NC}\n"      
     ansible-playbook {{ joinPath .chezmoi.sourceDir "dot_bootstrap/setup.yaml" | quote }} --ask-become-pass -v
 fi

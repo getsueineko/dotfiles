@@ -3,8 +3,14 @@
 {{ if eq .chezmoi.os "linux" -}}
 # set -euo pipefail
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # APT (если что-то указано)
 if command -v apt-get >/dev/null 2>&1 && [ {{ len .packages.linux.apt }} -gt 0 ]; then
+  echo "\n${GREEN}Installing some system packages...${NC}\n"
   sudo apt-get update -y
   xargs -r sudo apt-get install -y <<EOF
 {{- range .packages.linux.apt }}

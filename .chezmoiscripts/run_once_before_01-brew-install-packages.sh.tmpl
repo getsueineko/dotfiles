@@ -6,8 +6,14 @@ alias brew=/home/linuxbrew/.linuxbrew/bin/brew
 
 # set -euo pipefail
 
+# Colors
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m" # No Color
+
 # Homebrew/Linuxbrew
 if command -v brew >/dev/null 2>&1 && [ {{ len .packages.linux.brew }} -gt 0 ]; then
+  echo "\n${GREEN}Installing Homebrew packages...${NC}\n"
   brew bundle --file=/dev/stdin <<EOF
 {{- range .packages.linux.brew }}
 brew {{ . | quote }}
