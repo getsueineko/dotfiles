@@ -52,6 +52,7 @@ Make sure you have installed:
 sh -c "$(curl -fsLS https://chezmoi.io/get)"
 
 # Initialize and apply configs
+export GITHUB_USERNAME=getsueineko
 chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git
 ```
 
@@ -69,6 +70,7 @@ chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git
 
 - [x] ~~Add Nerd Font (**MesloLGS**) to ensure proper icons in terminals~~
 - [x] ~~Add https://github.com/catppuccin/warp for Warp Terminals~~
+
 
 
 
