@@ -1,4 +1,4 @@
 [data.git]
-name = "nexus"
-email = "nexus@pop-os.local"
-editor = "nano"
+    name = "nexus"
+    email = "nexus@pop-os.local"
+    editor = "nano"    
