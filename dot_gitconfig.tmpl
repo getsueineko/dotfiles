@@ -1,6 +1,6 @@
 [user]
-  name = {{ .git.name }}
-  email = {{ .git.email }}
+    name = {{ .name | quote }}
+    email = {{ .email | quote }}
 
 [alias]
   st = status
@@ -10,4 +10,4 @@
   lg = log --oneline --decorate --graph --all
 
 [core]
-  editor = {{ .git.editor | default "nvim" }}
+  editor = {{ default "nvim" .editor | quote }}
