@@ -1,6 +1,6 @@
 [user]
-  name = {{ .data.git.name }}
-  email = {{ .data.git.email }}
+  name = {{ .git.name }}
+  email = {{ .git.email }}
 
 [alias]
   st = status
@@ -10,4 +10,4 @@
   lg = log --oneline --decorate --graph --all
 
 [core]
-  editor = {{ .data.git.editor | default "nvim" }}
+  editor = {{ .git.editor | default "nvim" }}
