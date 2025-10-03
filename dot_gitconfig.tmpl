@@ -1,13 +1,13 @@
 [user]
-    name = {{ .name | quote }}
-    email = {{ .email | quote }}
-
-[alias]
-  st = status
-  co = checkout
-  ci = commit
-  br = branch
-  lg = log --oneline --decorate --graph --all
+    name = {{ env "GIT_NAME" | default "nexus" | quote }}
+    email = {{ env "GIT_EMAIL" | default "nexus@pop-os.local" | quote }}
 
 [core]
-  editor = {{ default "nvim" .editor | quote }}
+    editor = {{ env "GIT_EDITOR" | default "nano" | quote }}
+
+[alias]
+    st = status
+    co = checkout
+    ci = commit
+    br = branch
+    lg = log --oneline --decorate --graph --all
