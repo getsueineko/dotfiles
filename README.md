@@ -67,7 +67,8 @@ chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git
 
 ## TODO
 
-- Add Nerd Font (**MesloLGS**) to ensure proper icons in terminal
-- Add https://github.com/catppuccin/warp for Warp Terminal
+- [x] ~~Add Nerd Font (**MesloLGS**) to ensure proper icons in terminals~~
+- [x] ~~Add https://github.com/catppuccin/warp for Warp Terminals~~
+
 
 
