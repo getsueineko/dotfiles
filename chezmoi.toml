@@ -1,2 +1,4 @@
-[data]
-  git = { name = "nexus", email = "nexus@pop-os.local", editor = "nano" }
+[data.git]
+name = "nexus"
+email = "nexus@pop-os.local"
+editor = "nano"
