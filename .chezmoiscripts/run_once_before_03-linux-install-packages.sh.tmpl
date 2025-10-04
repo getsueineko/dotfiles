@@ -1,12 +1,13 @@
 #!{{ lookPath "sh" }}
 
-{{ if eq .chezmoi.os "linux" -}}
 # set -euo pipefail
 
 # Colors
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
+
+{{ if eq .chezmoi.os "linux" -}}
 
 # APT (если что-то указано)
 if command -v apt-get >/dev/null 2>&1 && [ {{ len .packages.linux.apt }} -gt 0 ]; then
@@ -18,4 +19,5 @@ if command -v apt-get >/dev/null 2>&1 && [ {{ len .packages.linux.apt }} -gt 0 ]
 {{- end }}
 EOF
 fi
+
 {{ end }}

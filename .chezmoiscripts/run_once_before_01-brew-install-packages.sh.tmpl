@@ -1,16 +1,17 @@
 #!{{ lookPath "sh" }}
 
-{{ if eq .chezmoi.os "linux" -}}
-export HOMEBREW_INSTALL_FROM_API=1
-export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
-alias brew=/home/linuxbrew/.linuxbrew/bin/brew
-
 # set -euo pipefail
 
 # Colors
 GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
+
+{{ if eq .chezmoi.os "linux" -}}
+
+export HOMEBREW_INSTALL_FROM_API=1
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+alias brew=/home/linuxbrew/.linuxbrew/bin/brew
 
 # Homebrew/Linuxbrew
 if command -v brew >/dev/null 2>&1 && [ {{ len .packages.linux.brew }} -gt 0 ]; then
@@ -21,4 +22,5 @@ brew {{ . | quote }}
 {{- end }}
 EOF
 fi
+
 {{ end -}}

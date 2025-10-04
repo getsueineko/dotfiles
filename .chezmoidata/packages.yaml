@@ -1,13 +1,5 @@
 packages:
-  linux:
-    apt:
-      - wget
-      - htop
-      - atop
-      - iftop
-      - vim-tiny      
-      - qt5ct
-      - qt6ct 
+  posix:
     brew:
       - ansible
       - argocd
@@ -46,4 +38,36 @@ packages:
       - yazi
       - yq
       - zellij
-      - zoxide
+      - zoxide  
+  linux:
+    apt:
+      - wget
+      - htop
+      - atop
+      - iftop
+      - vim-tiny      
+      - qt5ct
+      - qt6ct 
+  darwin:
+    casks:
+      - arc
+      - coconutbattery
+      - font-symbols-only-nerd-font
+      - hoppscotch
+      - iina
+      - iterm2
+      - jordanbaird-ice
+      - keepassxc
+      - keka
+      - keyclu
+      - localsend
+      - maccy
+      - mos
+      - obsidian
+      - orbstack
+      - rectangle
+      - shottr
+      - stats
+      - termius
+      - visual-studio-code
+      - warp
