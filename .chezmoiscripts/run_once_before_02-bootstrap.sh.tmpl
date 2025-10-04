@@ -10,11 +10,28 @@ NC="\033[0m" # No Color
 {{ if eq .chezmoi.os "linux" -}}
 
 # .bootstrap/setup.yml hash: {{ include "dot_bootstrap/setup.yaml" | sha256sum }}
-alias ansible-playbook=/home/linuxbrew/.linuxbrew/bin/ansible-playbook
-
-if command -v ansible-playbook &> /dev/null; then
-    echo "\n${GREEN}Starting basic setup...${NC}\n"      
+if command -v ansible-playbook >/dev/null 2>&1; then
+    printf "\n%sInstalling some Linux packages and features...%s\n\n" "$GREEN" "$NC"     
     ansible-playbook {{ joinPath .chezmoi.sourceDir "dot_bootstrap/setup.yaml" | quote }} --ask-become-pass
 fi
 
-{{ end }}
+{{ else if eq .chezmoi.os "darwin" -}}
+
+export HOMEBREW_INSTALL_FROM_API=1
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+export PATH="/opt/homebrew/bin:$PATH"
+
+{{- with index .packages "darwin" }}
+  {{- if gt (len .casks) 0 }}
+if command -v brew >/dev/null 2>&1; then
+    printf "\n%sInstalling some macOS packages (brew casks)...%s\n\n" "$GREEN" "$NC"
+    brew bundle --file=/dev/stdin <<'EOF'
+{{- range .casks }}
+cask {{ . | quote }}
+{{- end }}
+EOF
+fi
+  {{- end }}
+{{- end }}
+
+{{ end -}}

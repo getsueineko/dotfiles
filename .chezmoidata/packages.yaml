@@ -45,7 +45,14 @@ packages:
       - htop
       - atop
       - iftop
-      - vim-tiny      
+      - vim-tiny
+      - ffmpeg 
+      - 7zip
+      - poppler-utils
+      - imagemagick
+      - xclip
+      - wl-clipboard
+      - xsel           
       - qt5ct
       - qt6ct 
   darwin:
