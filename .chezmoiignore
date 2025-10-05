@@ -12,5 +12,8 @@
 {{ if ne .chezmoi.os "darwin" }}
 
 Library/Application Support/Code/User/settings.json
+.warp/themes
+.config/ghostty
 
 {{ end }}
+
