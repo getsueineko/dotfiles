@@ -85,7 +85,8 @@ zstyle ':completion:*' menu no
 alias wttr='wget -O - wttr.in/Moscow -q'
 alias k='kubecolor'
 {{- if eq .chezmoi.os "darwin" }}
-alias mc='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.sh"'
+alias mc='mc -u -X'
+alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.sh"'
 {{- end }}
 
 # ===== Tools =====
