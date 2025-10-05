@@ -4,7 +4,8 @@
 .config/qt6ct/
 .config/fontconfig/
 .config/Code/User/settings.json
-.config/Code/User/settings.json
+.config/warp-terminal/user_preferences.json
+.local/share/warp-terminal/themes
 
 {{ end }}
 

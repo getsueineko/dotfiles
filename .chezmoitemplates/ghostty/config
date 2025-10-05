@@ -1,4 +1,3 @@
-command = /usr/bin/zsh
 shell-integration = zsh
 window-save-state = always
 

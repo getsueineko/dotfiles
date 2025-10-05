@@ -1,0 +1,46 @@
+{
+  // === Workbench / UI ===
+  "workbench.startupEditor": "none",
+  "workbench.colorTheme": "Catppuccin Macchiato",
+  // === Terminal ===
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "terminal.integrated.env.windows": {
+    "FIG_NEW_SESSION": "1"
+  },
+  // === Editor ===
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  // === Docker ===
+  "docker.extension.enableComposeLanguageServer": false,
+  // === YAML ===
+  "yaml.schemas": {
+    "file:///Users/neko/.vscode/extensions/continue.continue-1.2.3-darwin-arm64/config-yaml-schema.json": [
+      ".continue/**/*.yaml"
+    ]
+  },
+  "yaml.validate": true,
+  "yaml.format.enable": true,
+  "yaml.hover": true,
+  "yaml.completion": true,
+  "yaml.customTags": [
+    "!Ref",
+    "!GetAtt"
+  ],
+  // === Miscellaneous ===
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "editor.minimap.enabled": false,
+  "workbench.settings.applyToAllProfiles": [],
+  "terminal.integrated.fontLigatures.enabled": true,
+  "editor.fontFamily": "'MesloLGS NF','Droid Sans Mono', 'monospace', monospace",
+  "terminal.explorerKind": "external"
+}
