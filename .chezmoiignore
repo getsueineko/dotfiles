@@ -1,0 +1,15 @@
+{{ if ne .chezmoi.os "linux" }}
+
+.config/qt5ct/
+.config/qt6ct/
+.config/fontconfig/
+.config/Code/User/settings.json
+.config/Code/User/settings.json
+
+{{ end }}
+
+{{ if ne .chezmoi.os "darwin" }}
+
+Library/Application Support/Code/User/settings.json
+
+{{ end }}
