@@ -1,5 +1,5 @@
 # ===== History Settings =====
-HISTSIZE=5000
+HISTSIZE=7000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
@@ -52,8 +52,14 @@ zinit light zdharma/fast-syntax-highlighting
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 # ===== Homebrew Environment =====
+{{- if eq .chezmoi.os "linux" }}
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export XDG_DATA_DIRS="/opt/homebrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+{{- end }}
 
 # ===== Completion System =====
 autoload -Uz compinit && compinit
@@ -81,7 +87,12 @@ eval "$(zoxide init zsh)"           # zoxide integration for smart cd
 
 # ===== fzf Key Bindings =====
 # Load fzf Zsh key bindings to enable Ctrl+R, etc.
+{{- if eq .chezmoi.os "linux" }}
 [ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] && source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
+{{- end }}
+{{- if eq .chezmoi.os "darwin" }}
+[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+{{- end }}
 
 # Bind Ctrl+R to interactive history search
 bindkey '^R' fzf-history-widget
@@ -93,4 +104,20 @@ function y() {
 	IFS= read -r -d '' cwd < "$tmp"
 	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
+}
+
+# === Update Zinit & Plugins Function ===
+function zsh-update() {
+  echo "🔄 Updating Zinit and plugins..."
+  zinit self-update && zinit update --all
+  echo "✅ All Zinit plugins updated!"
+}
+
+# === Optional: Add system-wide updates too ===
+function dev-update() {
+  echo "🛠️ Updating system tools..."
+  brew update && brew upgrade
+  starship upgrade
+  zsh-update
+  echo "🎉 Everything's fresh and clean!"
 }
