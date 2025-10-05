@@ -50,6 +50,8 @@ zinit light zdharma/fast-syntax-highlighting
 
 # ===== PATH =====
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$PATH:/Users/neko/.lmstudio/bin"
 
 # ===== Homebrew Environment =====
 {{- if eq .chezmoi.os "linux" }}
@@ -81,6 +83,10 @@ zstyle ':completion:*' menu no
 
 # ===== Aliases =====
 alias wttr='wget -O - wttr.in/Moscow -q'
+alias k='kubecolor'
+{{- if eq .chezmoi.os "darwin" }}
+alias mc='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.sh"'
+{{- end }}
 
 # ===== Tools =====
 eval "$(zoxide init zsh)"           # zoxide integration for smart cd
