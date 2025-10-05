@@ -115,16 +115,16 @@ function y() {
 
 # === Update Zinit & Plugins Function ===
 function zsh-update() {
-  echo "🔄 Updating Zinit and plugins..."
+  printf "🔄 Updating Zinit and plugins..."
   zinit self-update && zinit update --all
-  echo "✅ All Zinit plugins updated!"
+  printf "✅ All Zinit plugins updated!"
 }
 
 # === Optional: Add system-wide updates too ===
-function dev-update() {
-  echo "🛠️ Updating system tools..."
-  brew update && brew upgrade
+function world-update() {
+ printf "🛠️ Updating system tools..."
+  brew update && brew upgrade --greedy
   starship upgrade
   zsh-update
-  echo "🎉 Everything's fresh and clean!"
+  printf "🎉 Everything's fresh and clean!"
 }
