@@ -59,7 +59,9 @@ packages:
     casks:
       - arc
       - coconutbattery
+      - font-meslo-lg-nerd-font
       - font-symbols-only-nerd-font
+      - ghostty
       - hoppscotch
       - iina
       - iterm2

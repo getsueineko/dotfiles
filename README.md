@@ -2,6 +2,7 @@
 
 Personal dotfiles managed with [chezmoi](https://chezmoi.io/).  
 Keeps shell configs, app settings, and scripts consistent across machines.
+Ready to work out-of-box for Linux Ubuntu and macOS Silicon.
 
 ![Demo](assets/demo.gif)
 
@@ -70,7 +71,3 @@ chezmoi init --apply https://github.com/$GITHUB_USERNAME/dotfiles.git
 
 - [x] ~~Add Nerd Font (**MesloLGS**) to ensure proper icons in terminals~~
 - [x] ~~Add https://github.com/catppuccin/warp for Warp Terminals~~
-
-
-
-
