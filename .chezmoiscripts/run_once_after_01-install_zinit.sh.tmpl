@@ -7,6 +7,12 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
 
+{{ if eq .chezmoi.os "linux" -}}
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+{{ else if eq .chezmoi.os "darwin" -}}
+export PATH="/opt/homebrew/bin:$PATH"
+{{ end -}}
+
 # Check if zsh is installed
 if ! command -v zsh >/dev/null 2>&1; then
     printf "\n${RED}Zsh is not installed. Please install zsh and try again.${NC}\n\n"
