@@ -20,7 +20,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 {{- with index .packages "posix" }}
   {{- if gt (len .brew) 0 }}
 if command -v brew >/dev/null 2>&1; then
-  printf "\n%sInstalling Homebrew packages...%s\n\n" "$GREEN" "$NC"
+  printf "\n${GREEN}Installing Homebrew packages...${NC}\n\n"
   brew bundle --file=/dev/stdin <<'EOF'
     {{- range .brew }}
 brew {{ . | quote }}

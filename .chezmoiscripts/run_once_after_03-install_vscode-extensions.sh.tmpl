@@ -8,7 +8,7 @@ NC="\033[0m" # No Color
 
 # Check if VS Code is installed
 if command -v code >/dev/null 2>&1; then
-  printf "\n%sInstalling VS Code extensions...%s\n\n" "$GREEN" "$NC"
+  printf "\n${GREEN}Installing VS Code extensions...${NC}\n\n"
   while read -r ext; do
     if ! code --list-extensions | grep -qx "$ext"; then
       code --install-extension "$ext"

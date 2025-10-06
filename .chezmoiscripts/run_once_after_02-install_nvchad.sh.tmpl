@@ -15,7 +15,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 
 # Check if Neovim is installed
 if ! command -v nvim >/dev/null 2>&1; then
-  printf "\n%sNeovim is not installed. Please install it first.%s\n\n" "$RED" "$NC"
+  printf "\n${RED}Neovim is not installed. Please install it first.${NC}\n\n"
   exit 1
 fi
 
@@ -24,8 +24,8 @@ NVIM_CONFIG_DIR="${HOME}/.config/nvim"
 
 # If NvChad is not already installed, clone it
 if [ ! -d "$NVIM_CONFIG_DIR" ]; then
-  printf "\n%sInstalling NvChad...%s\n\n" "$GREEN" "$NC"
+  printf "\n${GREEN}Installing NvChad...${NC}\n\n"
   git clone https://github.com/NvChad/starter "$NVIM_CONFIG_DIR"
 else
-  printf "\n%sNvChad is already installed in %s%s\n\n" "$GREEN" "$NVIM_CONFIG_DIR" "$NC"
+  printf "\n${GREEN}NvChad is already installed in ${NVIM_CONFIG_DIR} ${NC}\n\n"
 fi

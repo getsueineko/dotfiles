@@ -9,15 +9,15 @@ NC="\033[0m" # No Color
 
 # Check if zsh is installed
 if ! command -v zsh >/dev/null 2>&1; then
-    printf "\n%sZsh is not installed. Please install zsh and try again.%s\n\n" "$RED" "$NC"
+    printf "\n${RED}Zsh is not installed. Please install zsh and try again.${NC}\n\n"
     exit 1
 fi
 
 # Check if zinit is already installed
 if [ ! -d "${HOME}/.zinit/bin" ]; then
-    printf "\n%sInstalling zinit...%s\n\n" "$GREEN" "$NC"
+    printf "\n${GREEN}Installing zinit...${NC}\n\n"
     # Run the official zinit install script
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/main/scripts/install.sh)"
 else
-    printf "\n%szinit is already installed — skipping%s\n\n" "$GREEN" "$NC"
+    printf "\n${GREEN}zinit is already installed — skipping${NC}\n\n"
 fi

@@ -9,11 +9,11 @@ NC="\033[0m" # No Color
 
 # Check if brew is already installed
 if ! command -v brew >/dev/null 2>&1; then
-    printf "\n%sInstalling Homebrew...%s\n\n" "$GREEN" "$NC"
+    printf "\n${GREEN}Installing Homebrew...${NC}\n\n"
 
     # Install Homebrew using the official Linux install script
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 else
-    printf "\n%sHomebrew is already installed — skipping%s\n\n" "$GREEN" "$NC"
+    printf "\n${GREEN}Homebrew is already installed — skipping${NC}\n\n"
 fi
