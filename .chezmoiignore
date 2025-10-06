@@ -1,0 +1,19 @@
+{{ if ne .chezmoi.os "linux" }}
+
+.config/qt5ct/
+.config/qt6ct/
+.config/fontconfig/
+.config/Code/User/settings.json
+.config/warp-terminal/user_preferences.json
+.local/share/warp-terminal/themes
+
+{{ end }}
+
+{{ if ne .chezmoi.os "darwin" }}
+
+Library/Application Support/Code/User/settings.json
+Library/Preferences/dev.warp.Warp-Stable.plist
+.warp/themes
+.config/ghostty
+
+{{ end }}

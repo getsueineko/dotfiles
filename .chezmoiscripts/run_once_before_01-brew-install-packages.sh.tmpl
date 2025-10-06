@@ -1,10 +1,5 @@
 #!{{ lookPath "sh" }}
 
-{{ if eq .chezmoi.os "linux" -}}
-export HOMEBREW_INSTALL_FROM_API=1
-export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
-alias brew=/home/linuxbrew/.linuxbrew/bin/brew
-
 # set -euo pipefail
 
 # Colors
@@ -12,13 +7,25 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0m" # No Color
 
+export HOMEBREW_INSTALL_FROM_API=1
+export HOMEBREW_DOWNLOAD_CONCURRENCY=auto
+
+{{ if eq .chezmoi.os "linux" -}}
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+{{ else if eq .chezmoi.os "darwin" -}}
+export PATH="/opt/homebrew/bin:$PATH"
+{{ end -}}
+
 # Homebrew/Linuxbrew
-if command -v brew >/dev/null 2>&1 && [ {{ len .packages.linux.brew }} -gt 0 ]; then
-  echo "\n${GREEN}Installing Homebrew packages...${NC}\n"
-  brew bundle --file=/dev/stdin <<EOF
-{{- range .packages.linux.brew }}
+{{- with index .packages "posix" }}
+  {{- if gt (len .brew) 0 }}
+if command -v brew >/dev/null 2>&1; then
+  printf "\n${GREEN}Installing Homebrew packages...${NC}\n\n"
+  brew bundle --file=/dev/stdin <<'EOF'
+    {{- range .brew }}
 brew {{ . | quote }}
-{{- end }}
+    {{- end }}
 EOF
 fi
-{{ end -}}
+  {{- end }}
+{{- end }}

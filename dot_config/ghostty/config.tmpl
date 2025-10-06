@@ -1,0 +1,7 @@
+# Shell
+{{- if eq .chezmoi.os "darwin" }}
+command = /opt/homebrew/bin/zsh
+{{- else if eq .chezmoi.os "linux" }}
+command = /usr/bin/zsh
+{{- end }}
+{{- template "ghostty/config" . -}}
