@@ -3,6 +3,7 @@
 .config/qt5ct/
 .config/qt6ct/
 .config/fontconfig/
+.config/Kvantum/
 .config/Code/User/settings.json
 .config/warp-terminal/user_preferences.json
 .local/share/warp-terminal/themes
