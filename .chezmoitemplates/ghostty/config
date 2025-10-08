@@ -2,15 +2,9 @@
 shell-integration = zsh
 window-save-state = always
 
-# Fonts
-font-family = MesloLGS NF Mono
-font-family-bold = MesloLGS NF Mono
-font-family-italic = MesloLGS NF Mono
-font-family-bold-italic = MesloLGS NF Mono
-font-feature = ss06
-font-size = 14
-adjust-underline-position = 4
-adjust-underline-thickness = 2
+# Window size
+window-width = 110
+window-height = 30
 
 # Theme / UI
 theme = catppuccin-mocha
@@ -22,6 +16,16 @@ background-opacity = 0.9
 background-blur-radius = 20
 unfocused-split-opacity = 0.6
 scrollback-limit = 10000
+
+# Fonts
+font-family = MesloLGS NF Mono
+font-family-bold = MesloLGS NF Mono
+font-family-italic = MesloLGS NF Mono
+font-family-bold-italic = MesloLGS NF Mono
+font-feature = ss06
+font-size = 14
+adjust-underline-position = 4
+adjust-underline-thickness = 2
 
 # Keybindings
 keybind = ctrl+shift+j=scroll_page_down
@@ -49,7 +53,3 @@ keybind = unconsumed:alt+j=resize_split:down,10
 keybind = unconsumed:alt+k=resize_split:up,10
 keybind = super+shift+i=inspector:toggle
 keybind = global:cmd+`=toggle_quick_terminal
-
-# Window size
-window-width = 110
-window-height = 30
