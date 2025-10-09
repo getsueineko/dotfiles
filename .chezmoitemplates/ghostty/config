@@ -1,13 +1,13 @@
 # Shell
 shell-integration = zsh
-window-save-state = always
 
 # Window size
 window-width = 110
 window-height = 30
+window-save-state = always
 
 # Theme / UI
-theme = catppuccin-mocha
+theme = catppuccin-mocha.conf
 cursor-invert-fg-bg = true
 window-theme = ghostty
 cursor-style = bar
@@ -53,3 +53,4 @@ keybind = unconsumed:alt+j=resize_split:down,10
 keybind = unconsumed:alt+k=resize_split:up,10
 keybind = super+shift+i=inspector:toggle
 keybind = global:cmd+`=toggle_quick_terminal
+
