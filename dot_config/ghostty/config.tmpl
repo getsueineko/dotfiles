@@ -6,5 +6,6 @@ macos-option-as-alt = true
 mouse-hide-while-typing = true
 {{- else if eq .chezmoi.os "linux" }}
 command = /usr/bin/zsh
-{{- end }}
-{{- template "ghostty/config" . -}}
+{{ end }}
+
+{{ template "ghostty/config" . -}}
