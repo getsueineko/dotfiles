@@ -1,6 +1,7 @@
 packages:
   posix:
     brew:
+      - age
       - ansible
       - argocd
       - bat
@@ -33,6 +34,7 @@ packages:
       - resvg
       - ripgrep
       - ruff
+      - sops
       - uv
       - xh
       - yazi
