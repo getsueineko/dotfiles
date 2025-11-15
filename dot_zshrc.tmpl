@@ -120,11 +120,3 @@ function zsh-update() {
   printf "✅ All Zinit plugins updated!"
 }
 
-# === Optional: Add system-wide updates too ===
-function world-update() {
- printf "🛠️ Updating system tools..."
-  brew update && brew upgrade
-  starship upgrade
-  zsh-update
-  printf "🎉 Everything's fresh and clean!"
-}
