@@ -14,6 +14,21 @@ setopt inc_append_history_time          # save history immediately with timestam
 setopt correct         
 setopt auto_cd
 
+{{- if eq .chezmoi.os "linux" }}
+# Set font only in real Linux TTY
+if [[ "$TERM" == "linux" && -z "$ZSH_TTY_FONT_SET" ]]; then
+  setfont ter-v16b
+  export ZSH_TTY_FONT_SET=1
+fi
+
+# Clean prompt for real Linux TTY
+if [[ "$TERM" == "linux" ]]; then
+  export STARSHIP_CONFIG="$HOME/.config/starship-tty.toml"
+else
+  export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+fi
+{{- end }}
+
 # ===== Starship Prompt =====
 eval "$(starship init zsh)"
 
