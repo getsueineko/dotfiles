@@ -7,6 +7,16 @@
 
   vars:
     aur_helper: paru
+    pacman_packages:
+      - zsh
+      - aria2
+      - base-devel
+      - git
+      - gnupg
+      - flatpak
+      - docker
+      - docker-compose
+      - terminus-font    
     aur_packages:
       - warp-terminal-bin
       - visual-studio-code-bin
@@ -25,17 +35,9 @@
 
     - name: Install base packages
       community.general.pacman:
-        name:
-          - zsh
-          - aria2
-          - base-devel
-          - git
-          - gnupg
-          - flatpak
-          - docker
-          - docker-compose
-          - terminus-font
+        name: "{{ pacman_packages }}"
         state: present
+      when: pacman_packages | length > 0
 
     # ---- ZSH ----
     - name: Change shell to zsh
@@ -114,4 +116,5 @@
           - com.mattjakeman.ExtensionManager
         state: present
         method: system
+
 
