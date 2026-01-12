@@ -7,7 +7,10 @@
 
   vars:
     aur_helper: paru
-
+    aur_packages:
+      - warp-terminal-bin
+      - visual-studio-code-bin
+      
   tasks:
     # ---- User ----
     - name: Get my user
@@ -45,20 +48,21 @@
       become_user: "{{ remote_regular_user }}"
       ansible.builtin.shell: |
         if ! command -v paru >/dev/null; then
+          rm -rf /tmp/paru
           git clone https://aur.archlinux.org/paru.git /tmp/paru
           cd /tmp/paru
           makepkg -si --noconfirm
         fi
       args:
         creates: /usr/bin/paru
-
+    
     # ---- AUR packages ----
     - name: Install AUR packages
       become_user: "{{ remote_regular_user }}"
       ansible.builtin.command: >
-        {{ aur_helper }} -S --noconfirm
-        warp-terminal-bin
-        visual-studio-code-bin
+        {{ aur_helper }} -S --noconfirm --needed {{ aur_packages | join(' ') }}
+      when: aur_packages | length > 0
+
 
     # ---- Docker ----
     - name: Enable and start Docker
@@ -110,3 +114,4 @@
           - com.mattjakeman.ExtensionManager
         state: present
         method: system
+
