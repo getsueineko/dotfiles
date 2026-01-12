@@ -1,0 +1,112 @@
+---
+- name: Machine setup (Arch Linux)
+  hosts: localhost
+  become: true
+  connection: local
+  gather_facts: true
+
+  vars:
+    aur_helper: paru
+
+  tasks:
+    # ---- User ----
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remote_regular_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+    # ---- Pacman ----
+    - name: Update system
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: Install base packages
+      community.general.pacman:
+        name:
+          - zsh
+          - aria2
+          - base-devel
+          - git
+          - gnupg
+          - flatpak
+          - docker
+          - docker-compose
+          - terminus-font
+        state: present
+
+    # ---- ZSH ----
+    - name: Change shell to zsh
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        shell: /usr/bin/zsh
+
+    # ---- paru (AUR helper) ----
+    - name: Install paru
+      become_user: "{{ remote_regular_user }}"
+      ansible.builtin.shell: |
+        if ! command -v paru >/dev/null; then
+          git clone https://aur.archlinux.org/paru.git /tmp/paru
+          cd /tmp/paru
+          makepkg -si --noconfirm
+        fi
+      args:
+        creates: /usr/bin/paru
+
+    # ---- AUR packages ----
+    - name: Install AUR packages
+      become_user: "{{ remote_regular_user }}"
+      ansible.builtin.command: >
+        {{ aur_helper }} -S --noconfirm
+        warp-terminal-bin
+        visual-studio-code-bin
+
+    # ---- Docker ----
+    - name: Enable and start Docker
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Ensure docker group exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        groups: docker
+        append: true
+
+    # ---- Flatpak ----
+    - name: Add Flathub remote (system-wide)
+      community.general.flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
+
+    - name: Install Flatpak packages
+      community.general.flatpak:
+        name:
+          - com.github.johnfactotum.Foliate
+          - app.zen_browser.zen
+          - com.spotify.Client
+          - com.termius.Termius
+          - io.github.celluloid_player.Celluloid
+          - org.gnome.World.Secrets
+          - org.localsend.localsend_app
+          - org.telegram.desktop
+          - re.sonny.Junction
+          - md.obsidian.Obsidian
+          - be.alexandervanhee.gradia
+          - com.odnoyko.valot
+          - org.gnome.Fractal
+          - io.github.realmazharhussain.GdmSettings
+          - io.github.flattool.Warehouse
+          - com.github.tchx84.Flatseal
+          - io.missioncenter.MissionCenter
+          - com.reqable.Reqable
+          - com.mattjakeman.ExtensionManager
+        state: present
+        method: system
