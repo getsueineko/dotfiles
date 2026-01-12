@@ -56,7 +56,21 @@ packages:
       - wl-clipboard
       - xsel           
       - qt5ct
-      - qt6ct 
+      - qt6ct
+    pacman:
+      - wget
+      - htop
+      - atop
+      - iftop
+      - ffmpeg 
+      - 7zip
+      - poppler-utils
+      - imagemagick
+      - xclip
+      - wl-clipboard
+      - xsel           
+      - qt5ct
+      - qt6ct        
   darwin:
     casks:
       - arc
