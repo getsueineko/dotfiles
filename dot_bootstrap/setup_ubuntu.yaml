@@ -8,7 +8,17 @@
     meslo_version: "v3.4.0"
     ubuntu_version: "24.04"
     ghostty_version: "1.2.3-0"
-
+    base_packages:
+      - zsh
+      - aria2
+      - apt-transport-https
+      - ca-certificates
+      - build-essential
+      - software-properties-common
+      - gnupg
+      - lsb-release
+      - flatpak
+  
   tasks:
     - name: Get my user
       ansible.builtin.set_fact:
@@ -19,19 +29,11 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: Install base packages
+    - name: Install base packages (Ubuntu)
       ansible.builtin.apt:
-        name:
-          - zsh
-          - aria2
-          - apt-transport-https
-          - ca-certificates
-          - build-essential
-          - software-properties-common
-          - gnupg
-          - lsb-release
-          - flatpak          
+        name: "{{ base_packages }}"
         state: present
+      when: base_packages | length > 0
 
     - name: Change shell to zsh
       ansible.builtin.user:
@@ -102,28 +104,29 @@
     # ---- Fonts ----
     - name: Ensure fonts directory exists
       ansible.builtin.file:
-        path: "{{ lookup('env', 'HOME') }}/.fonts"
+        path: "{{ lookup('env', 'HOME') }}/.local/share/fonts"
         state: directory
         mode: "0755"
-
+    
     - name: Check if Meslo font already exists
-      ansible.builtin.stat:
-        path: "{{ lookup('env', 'HOME') }}/.fonts/*Meslo*.ttf"
-      register: meslo_exists
-
+      ansible.builtin.find:
+        paths: "{{ lookup('env', 'HOME') }}/.local/share/fonts"
+        patterns: "*Meslo*.ttf"
+      register: meslo_fonts
+    
     - name: Download Meslo Nerd Font
       ansible.builtin.get_url:
         url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ meslo_version }}/Meslo.tar.xz"
         dest: "/tmp/Meslo.tar.xz"
         mode: "0644"
-      when: not meslo_exists.stat.exists
-
+      when: meslo_fonts.matched == 0
+    
     - name: Extract Meslo Nerd Font
       ansible.builtin.unarchive:
         src: "/tmp/Meslo.tar.xz"
-        dest: "{{ lookup('env', 'HOME') }}/.fonts/"
+        dest: "{{ lookup('env', 'HOME') }}/.local/share/fonts/"
         remote_src: yes
-      when: not meslo_exists.stat.exists
+      when: meslo_fonts.matched == 0
 
     - name: Refresh font cache
       ansible.builtin.command: fc-cache -f
@@ -161,4 +164,5 @@
           - com.mattjakeman.ExtensionManager
         state: present
         method: system
+
       
