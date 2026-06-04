@@ -56,17 +56,20 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# ===== Plugins  =====         
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions          
-zinit light none9632/zsh-sudo
+# ===== Plugins  =====
 zinit light Aloxaf/fzf-tab
-zinit light zdharma/fast-syntax-highlighting 
+zinit wait lucid blockf light zsh-users/zsh-completions
+zinit wait lucid light zsh-users/zsh-autosuggestions          
+zinit wait lucid light none9632/zsh-sudo
+zinit wait lucid light zdharma/fast-syntax-highlighting 
+
+# ===== Completion System =====
+autoload -Uz compinit && compinit
 
 # ===== PATH =====
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$PATH:/Users/neko/.lmstudio/bin"
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
 
 # ===== Homebrew Environment =====
 {{- if eq .chezmoi.os "linux" }}
@@ -77,9 +80,6 @@ export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS:-/usr/loc
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export XDG_DATA_DIRS="/opt/homebrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 {{- end }}
-
-# ===== Completion System =====
-autoload -Uz compinit && compinit
 
 # Enable history completion in fzf-tab
 # Combines current session history and file-based history
@@ -97,7 +97,7 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 
 # ===== Aliases =====
-alias wttr='wget -O - wttr.in/Moscow -q'
+alias wttr='curl -s wttr.in'
 alias k='kubecolor'
 {{- if eq .chezmoi.os "darwin" }}
 alias mc='mc -u -X'
@@ -132,8 +132,8 @@ function y() {
 
 # === Update Zinit & Plugins Function ===
 function zsh-update() {
-  printf "🔄 Updating Zinit and plugins..."
+  printf "🔄 Updating Zinit and plugins...\n"
   zinit self-update && zinit update --all
-  printf "✅ All Zinit plugins updated!"
+  printf "✅ All Zinit plugins updated!\n"
 }
 
