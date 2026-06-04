@@ -106,7 +106,8 @@ alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.
 
 # ===== Tools =====
 eval "$(zoxide init zsh)"           # zoxide integration for smart cd
-[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh  # Generic Colourizer
+# [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh  # Generic Colourizer
+eval "$(rgrc --aliases)"           # # Generic Colourizer in Rust
 
 # ===== fzf Key Bindings =====
 # Load fzf Zsh key bindings to enable Ctrl+R, etc.
