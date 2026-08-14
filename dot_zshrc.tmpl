@@ -1,18 +1,47 @@
-# ===== History Settings =====
-HISTSIZE=7000
+# ===== History =====
+
+HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
 
-# Options for better history management
-setopt append_history share_history      # share history across sessions
+# History options
+setopt append_history share_history
 setopt hist_ignore_space hist_ignore_all_dups hist_save_no_dups
 setopt hist_ignore_dups hist_find_no_dups
-setopt inc_append_history_time          # save history immediately with timestamp
+setopt inc_append_history_time
 
-# ===== Some improvements =====
-setopt correct         
+
+# ===== Shell Options =====
+
+setopt correct
 setopt auto_cd
+
+
+# ===== PATH =====
+
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+{{- if eq .chezmoi.os "darwin" }}
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+{{- end }}
+
+
+# ===== Homebrew =====
+
+# Load Homebrew before Starship, Carapace and zoxide
+
+{{- if eq .chezmoi.os "linux" }}
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+{{- end }}
+
+{{- if eq .chezmoi.os "darwin" }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export XDG_DATA_DIRS="/opt/homebrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+{{- end }}
+
+
+# ===== Real Linux TTY =====
 
 {{- if eq .chezmoi.os "linux" }}
 # Set font only in real Linux TTY
@@ -29,15 +58,21 @@ else
 fi
 {{- end }}
 
-# ===== Starship Prompt =====
-eval "$(starship init zsh)"
+# ===== Starship =====
 
-# ===== Zinit  =====
+# Load after PATH and Homebrew
+
+command -v starship >/dev/null && eval "$(starship init zsh)"
+
+
+# ===== Zinit =====
+
 ### Added by Zinit's installer
+
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+    command git clone https\://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
         print -P "%F{160} The clone has failed.%f%b"
 fi
@@ -46,8 +81,7 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
+# Load required annexes
 zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
@@ -56,47 +90,61 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# ===== Plugins  =====
-zinit light Aloxaf/fzf-tab
-zinit wait lucid blockf light zsh-users/zsh-completions
-zinit wait lucid light zsh-users/zsh-autosuggestions          
-zinit wait lucid light none9632/zsh-sudo
-zinit wait lucid light zdharma/fast-syntax-highlighting 
 
 # ===== Completion System =====
-autoload -Uz compinit && compinit
 
-# ===== PATH =====
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+# Run full compinit once per day
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
-# ===== Homebrew Environment =====
-{{- if eq .chezmoi.os "linux" }}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-{{- end }}
-{{- if eq .chezmoi.os "darwin" }}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export XDG_DATA_DIRS="/opt/homebrew/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-{{- end }}
 
-# Enable history completion in fzf-tab
-# Combines current session history and file-based history
+# ===== Carapace =====
+
+# Unified CLI completion
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+
+if command -v carapace >/dev/null; then
+    zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+    source <(carapace _carapace zsh)
+fi
+
+
+# ===== Plugins =====
+
+# Load completion and ZLE plugins
+# Syntax highlighting is loaded last
+
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light none9632/zsh-sudo
+zinit light Aloxaf/fzf-tab
+
+
+# ===== fzf-tab =====
+
+# History preview
 zstyle ':fzf-tab:complete:history:*' fzf-preview 'fc -l 1 | tac; tail -n 5000 ~/.zsh_history | tac'
 zstyle ':fzf-tab:complete:history:*' fzf-switch '1'
 
-# Enable interactive previews for cd and zoxide completions
+# Directory previews
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-# General completion settings
-eval "$(dircolors -b)"  # ensure LS_COLORS is defined
+
+# ===== Completion Options =====
+
+eval "$(dircolors -b)"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 
+
 # ===== Aliases =====
+
 alias wttr='curl -s wttr.in'
 alias k='kubecolor'
 {{- if eq .chezmoi.os "darwin" }}
@@ -104,36 +152,81 @@ alias mc='mc -u -X'
 alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.sh"'
 {{- end }}
 
+
 # ===== Tools =====
-eval "$(zoxide init zsh)"           # zoxide integration for smart cd
-# [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh  # Generic Colourizer
+
+# zoxide integration
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)" # zoxide integration for smart cd
 eval "$(rgrc --aliases)"           # # Generic Colourizer in Rust
 
 # ===== fzf Key Bindings =====
-# Load fzf Zsh key bindings to enable Ctrl+R, etc.
-{{- if eq .chezmoi.os "linux" }}
-[ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] && source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
-{{- end }}
-{{- if eq .chezmoi.os "darwin" }}
-[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
-{{- end }}
 
-# Bind Ctrl+R to interactive history search
-bindkey '^R' fzf-history-widget
+# Use the built-in Zsh integration
+if command -v fzf >/dev/null; then
+    source <(fzf --zsh)
+else
+    # Fallback for older fzf versions
+    [ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] && source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
+fi
 
-# ===== Yazi shell wrapper =====
+# Bind Ctrl+R if the widget exists
+(( ${+widgets[fzf-history-widget]} )) && bindkey '^R' fzf-history-widget
+
+
+# ===== System Exports =====
+
+export AGE_KEY_FILE="$HOME/.config/sops/age/key.txt"
+export ANSIBLE_VAULT_PASSWORD_FILE="$HOME/.ansible_vault/.vault_passw"
+
+
+# ===== Yazi =====
+
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        yazi "$@" --cwd-file="$tmp"
+        IFS= read -r -d '' cwd < "$tmp"
+        [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+        rm -f -- "$tmp"
 }
 
-# === Update Zinit & Plugins Function ===
+
+# ===== Zinit Update =====
+
 function zsh-update() {
-  printf "🔄 Updating Zinit and plugins...\n"
+  printf "🔄 Updating Zinit and plugins..."
   zinit self-update && zinit update --all
-  printf "✅ All Zinit plugins updated!\n"
+  printf "✅ All Zinit plugins updated!"
 }
 
+
+# ===== Homebrew Upgrade =====
+
+brew-smart-upgrade() {
+    local failed=()
+
+    for pkg in $(brew outdated); do
+        echo "=== Upgrading $pkg ==="
+
+        if brew upgrade "$pkg"; then
+            echo "✓ $pkg upgraded"
+        else
+            echo "✗ $pkg failed"
+            failed+=("$pkg")
+        fi
+
+        echo
+    done
+
+    if (( ${#failed[@]} > 0 )); then
+        echo "Failed packages:"
+        printf ' - %s\n' "$failed[@]"
+    else
+        echo "All packages upgraded successfully."
+    fi
+}
+
+
+# ===== Syntax Highlighting =====
+
+# Must be loaded last
+zinit light zdharma-continuum/fast-syntax-highlighting
