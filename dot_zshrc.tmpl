@@ -58,6 +58,7 @@ else
 fi
 {{- end }}
 
+
 # ===== Starship =====
 
 # Load after PATH and Homebrew
@@ -91,10 +92,17 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 
 
+# ===== Completion Plugins =====
+
+# Load completion definitions before compinit
+zinit light zsh-users/zsh-completions
+
+
 # ===== Completion System =====
 
 # Run full compinit once per day
 autoload -Uz compinit
+
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
   compinit
 else
@@ -104,7 +112,7 @@ fi
 
 # ===== Carapace =====
 
-# Unified CLI completion
+# Native completions still take priority via fpath; Carapace fills the gaps
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 
 if command -v carapace >/dev/null; then
@@ -113,15 +121,35 @@ if command -v carapace >/dev/null; then
 fi
 
 
+# ===== fzf Key Bindings =====
+
+# Use the built-in Zsh integration
+if command -v fzf >/dev/null; then
+    source <(fzf --zsh)
+else
+    # Fallback for older fzf versions
+    [ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] &&
+        source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
+fi
+
+# Bind Ctrl+R if the widget exists
+(( ${+widgets[fzf-history-widget]} )) && bindkey '^R' fzf-history-widget
+
+
+# ===== fzf-tab plugin =====
+
+# Load after compinit and fzf
+zinit light Aloxaf/fzf-tab
+
+# Bind Tab to fzf-tab
+bindkey '^I' fzf-tab-complete
+
+
 # ===== Plugins =====
 
-# Load completion and ZLE plugins
-# Syntax highlighting is loaded last
-
-zinit light zsh-users/zsh-completions
+# Load ZLE plugins after fzf-tab
 zinit light zsh-users/zsh-autosuggestions
 zinit light none9632/zsh-sudo
-zinit light Aloxaf/fzf-tab
 
 
 # ===== fzf-tab =====
@@ -152,27 +180,12 @@ alias mc='mc -u -X'
 alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.sh"'
 {{- end }}
 
-
 # ===== Tools =====
 
 # zoxide integration
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)" # zoxide integration for smart cd
-eval "$(rgrc --aliases)"           # # Generic Colourizer in Rust
-unalias kubectl 2>/dev/null   # rgrc's colorized wrapper breaks carapace's `kubectl __complete` parsing
-
-
-# ===== fzf Key Bindings =====
-
-# Use the built-in Zsh integration
-if command -v fzf >/dev/null; then
-    source <(fzf --zsh)
-else
-    # Fallback for older fzf versions
-    [ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] && source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
-fi
-
-# Bind Ctrl+R if the widget exists
-(( ${+widgets[fzf-history-widget]} )) && bindkey '^R' fzf-history-widget
+eval "$(rgrc --aliases)"                                  # Generic Colourizer in Rust
+unalias kubectl 2>/dev/null                               # FIX rgrc's colorized wrapper breaks carapace's `kubectl __complete` parsing
 
 
 # ===== System Exports =====
@@ -194,7 +207,7 @@ function y() {
 
 # ===== Zinit Update =====
 
-function zsh-update() {
+function zinit-update() {
   printf "🔄 Updating Zinit and plugins..."
   zinit self-update && zinit update --all
   printf "✅ All Zinit plugins updated!"
@@ -207,7 +220,7 @@ brew-smart-upgrade() {
     local failed=()
 
     for pkg in $(brew outdated); do
-        echo "=== Upgrading $pkg ==="
+        echo "🔄 Upgrading $pkg ..."
 
         if brew upgrade "$pkg"; then
             echo "✓ $pkg upgraded"
@@ -223,7 +236,7 @@ brew-smart-upgrade() {
         echo "Failed packages:"
         printf ' - %s\n' "$failed[@]"
     else
-        echo "All packages upgraded successfully."
+        echo "✅ All packages upgraded successfully."
     fi
 }
 
