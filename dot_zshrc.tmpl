@@ -158,6 +158,8 @@ alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.
 # zoxide integration
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)" # zoxide integration for smart cd
 eval "$(rgrc --aliases)"           # # Generic Colourizer in Rust
+unalias kubectl 2>/dev/null   # rgrc's colorized wrapper breaks carapace's `kubectl __complete` parsing
+
 
 # ===== fzf Key Bindings =====
 
