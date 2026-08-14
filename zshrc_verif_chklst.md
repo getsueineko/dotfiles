@@ -28,7 +28,7 @@ A checklist to sanity-check every feature configured in `.zshrc` after any chang
 ## Zinit
 
 - [ ] `zinit plugins` lists all installed plugins with no load errors
-- [ ] `zsh-update` runs and updates plugins without fatal errors
+- [ ] `zinit-update` runs and updates plugins without fatal errors
 
 ## Completion (compinit)
 
@@ -83,7 +83,7 @@ A checklist to sanity-check every feature configured in `.zshrc` after any chang
 ## Functions
 
 - [ ] `y` opens yazi and changes `$PWD` to the selected directory on exit
-- [ ] `zsh-update` updates zinit and all plugins
+- [ ] `zinit-update` updates zinit and all plugins
 - [ ] `brew-smart-upgrade` upgrades packages one by one and reports any failures at the end
 
 ## Overall
