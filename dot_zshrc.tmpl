@@ -113,12 +113,12 @@ fi
 # ===== Carapace =====
 
 # Native completions still take priority via fpath; Carapace fills the gaps
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-
-if command -v carapace >/dev/null; then
-    zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-    source <(carapace _carapace zsh)
-fi
+# export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+#
+# if command -v carapace >/dev/null; then
+#     zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+#     source <(carapace _carapace zsh)
+# fi
 
 
 # ===== fzf Key Bindings =====
