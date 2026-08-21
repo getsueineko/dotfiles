@@ -6,8 +6,7 @@ SAVEHIST=$HISTSIZE
 
 # History options
 setopt append_history share_history
-setopt hist_ignore_space hist_ignore_all_dups hist_save_no_dups
-setopt hist_ignore_dups hist_find_no_dups
+setopt hist_ignore_space hist_ignore_all_dups hist_find_no_dups
 setopt inc_append_history_time
 
 
@@ -19,10 +18,17 @@ setopt auto_cd
 
 # ===== PATH =====
 
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+typeset -U path PATH
+
+path=(
+    "$HOME/.local/bin"
+    "$HOME/bin"
+    "${KREW_ROOT:-$HOME/.krew}/bin"
+    $path
+)
+
 {{- if eq .chezmoi.os "darwin" }}
-[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
+[[ -d "$HOME/.lmstudio/bin" ]] && path+=("$HOME/.lmstudio/bin")
 {{- end }}
 
 
@@ -63,7 +69,7 @@ fi
 
 # Load after PATH and Homebrew
 
-command -v starship >/dev/null && eval "$(starship init zsh)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 
 
 # ===== Zinit =====
@@ -124,12 +130,13 @@ fi
 # ===== fzf Key Bindings =====
 
 # Use the built-in Zsh integration
-if command -v fzf >/dev/null; then
+if (( $+commands[fzf] )); then
     source <(fzf --zsh)
 else
-    # Fallback for older fzf versions
-    [ -f /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh ] &&
-        source /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh
+    if (( $+commands[brew] )); then
+        fzf_bindings="$(brew --prefix fzf 2>/dev/null)/shell/key-bindings.zsh"
+        [[ -f "$fzf_bindings" ]] && source "$fzf_bindings"
+    fi
 fi
 
 # Bind Ctrl+R if the widget exists
@@ -183,8 +190,8 @@ alias mcz='. "$(brew --prefix)/opt/midnight-commander/libexec/mc/mc-wrapper-zsh.
 # ===== Tools =====
 
 # zoxide integration
-command -v zoxide >/dev/null && eval "$(zoxide init zsh)" # zoxide integration for smart cd
-eval "$(rgrc --aliases)"                                  # Generic Colourizer in Rust
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)" # zoxide integration for smart cd
+(( $+commands[rgrc] )) && eval "$(rgrc --aliases)"    # Generic Colourizer in Rust
 unalias kubectl 2>/dev/null                               # FIX rgrc's colorized wrapper breaks carapace's `kubectl __complete` parsing
 
 
@@ -240,6 +247,38 @@ brew-smart-upgrade() {
     fi
 }
 
+zsh-doctor() {
+    local tool
+    local -a tools=(
+        git
+        zsh
+        starship
+        fzf
+        eza
+        zoxide
+        rgrc
+        brew
+    )
+
+    print "Zsh's Dependencies:"
+
+    for tool in "${tools[@]}"; do
+        if (( $+commands[$tool] )); then
+            printf '  [ok ✓ ]      %-15s %s\n' "$tool" "${commands[$tool]}"
+        else
+            printf '  [missing ✗] %s\n' "$tool"
+        fi
+    done
+
+    print
+    print 'Zinit:'
+
+    if [[ -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
+        print '  [ok ✓ ]      zinit'
+    else
+        print '  [missing ✗] zinit'
+    fi
+}
 
 # ===== Syntax Highlighting =====
 
